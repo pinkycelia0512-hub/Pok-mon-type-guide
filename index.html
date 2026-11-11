@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon 屬性新手指南</title>
+
+  <style>
+    :root {
+      --navy: #26345d;
+      --yellow: #ffcb05;
+      --blue: #3b7ad9;
+      --cream: #fffaf0;
+      --white: #ffffff;
+      --text: #263238;
+      --shadow: 0 8px 24px rgba(38, 52, 93, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--cream);
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 70px 20px 60px;
+      text-align: center;
+      color: var(--white);
+      background: linear-gradient(135deg, #26345d, #3b7ad9);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3.7rem);
+    }
+
+    header h1 span {
+      color: var(--yellow);
+    }
+
+    header p {
+      max-width: 650px;
+      margin: 16px auto 0;
+      font-size: 1.08rem;
+    }
+
+    main {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 45px 0;
+    }
+
+    h2 {
+      color: var(--navy);
+    }
+
+    .intro {
+      margin-bottom: 35px;
+      text-align: center;
+    }
+
+    .search-box {
+      display: flex;
+      max-width: 620px;
+      margin: 25px auto 40px;
+      gap: 10px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #d9deea;
+      border-radius: 14px;
+      font-size: 1rem;
+    }
+
+    .search-box input:focus {
+      border-color: var(--blue);
+      outline: none;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .type-card {
+      overflow: hidden;
+      border: none;
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .type-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 13px 30px rgba(38, 52, 93, 0.2);
+    }
+
+    .card-color {
+      height: 10px;
+      background: var(--type-color);
+    }
+
+    .card-content {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .card-content img {
+      width: 110px;
+      height: 110px;
+      image-rendering: pixelated;
+    }
+
+    .type-name {
+      margin: 6px 0 0;
+      color: var(--navy);
+      font-size: 1.45rem;
+    }
+
+    .english-name {
+      color: #72788a;
+      font-weight: bold;
+    }
+
+    .more-button {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--type-color);
+      font-weight: bold;
+    }
+
+    .detail-panel {
+      display: none;
+      margin-top: 40px;
+      padding: 30px;
+      border-top: 8px solid var(--detail-color);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-panel.show {
+      display: block;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .detail-header img {
+      width: 120px;
+      height: 120px;
+      image-rendering: pixelated;
+    }
+
+    .detail-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      margin-top: 20px;
+      gap: 16px;
+    }
+
+    .detail-item {
+      padding: 17px;
+      border-radius: 14px;
+      background: #f5f7fc;
+    }
+
+    .detail-item strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--navy);
+    }
+
+    .close-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: var(--white);
+      background: var(--navy);
+      cursor: pointer;
+    }
+
+    .quiz {
+      margin-top: 55px;
+      padding: 32px;
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-options {
+      display: grid;
+      margin-top: 20px;
+      gap: 12px;
+    }
+
+    .quiz-option {
+      padding: 13px;
+      border: 2px solid #d9deea;
+      border-radius: 12px;
+      background: var(--white);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--blue);
+      background: #f1f6ff;
+    }
+
+    #quizResult {
+      min-height: 28px;
+      margin-top: 17px;
+      font-weight: bold;
+    }
+
+    .next-button {
+      display: none;
+      margin-top: 10px;
+      padding: 11px 20px;
+      border: none;
+      border-radius: 10px;
+      color: var(--white);
+      background: var(--blue);
+      cursor: pointer;
+    }
+
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      color: #e9edff;
+      background: var(--navy);
+      font-size: 0.9rem;
+    }
+
+    .empty-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #73798a;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 50px 18px;
+      }
+
+      .detail-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .quiz {
+        padding: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1><span>Pokémon</span> 屬性新手指南</h1>
+    <p>
+      第一次接觸寶可夢屬性也沒關係！選擇屬性卡片，
+      快速了解各屬性的特色、優勢與弱點。
+    </p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>選擇想認識的屬性</h2>
+      <p>點擊卡片查看詳細內容，或輸入中文、英文名稱搜尋。</p>
+
+      <div class="search-box">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="例如：火、Water、幽靈"
+          aria-label="搜尋寶可夢屬性"
+        >
+      </div>
+    </section>
+
+    <section id="typeGrid" class="type-grid"></section>
+
+    <section id="detailPanel" class="detail-panel" aria-live="polite"></section>
+
+    <section class="quiz">
+      <h2>屬性小測驗</h2>
+      <p id="quizQuestion"></p>
+      <div id="quizOptions" class="quiz-options"></div>
+      <p id="quizResult"></p>
+      <button id="nextQuestion" class="next-button">下一題</button>
+    </section>
+  </main>
+
+  <footer>
+    本網站為課堂學習及非商業用途的非官方作品。Pokémon相關名稱與商標屬於原權利人。
+  </footer>
+
+  <script>
+    const typeData = [
+      {
+        id: "fire",
+        zh: "火屬性",
+        en: "Fire",
+        color: "#ef6c4d",
+        pokemon: "小火龍",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+        feature: "擅長使用火焰攻擊，通常給人速度快、攻擊力強的印象。",
+        strong: "草、冰、蟲、鋼",
+        weakAttack: "火、水、岩石、龍",
+        weakness: "水、地面、岩石"
+      },
+      {
+        id: "water",
+        zh: "水屬性",
+        en: "Water",
+        color: "#4f9de8",
+        pokemon: "傑尼龜",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
+        feature: "能力較為均衡，是新手容易理解與使用的屬性。",
+        strong: "火、地面、岩石",
+        weakAttack: "水、草、龍",
+        weakness: "電、草"
+      },
+      {
+        id: "grass",
+        zh: "草屬性",
+        en: "Grass",
+        color: "#67ad5b",
+        pokemon: "妙蛙種子",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+        feature: "常與植物和自然有關，部分招式能恢復體力或改變對手狀態。",
+        strong: "水、地面、岩石",
+        weakAttack: "火、草、毒、飛行、蟲、龍、鋼",
+        weakness: "火、冰、毒、飛行、蟲"
+      },
+      {
+        id: "electric",
+        zh: "電屬性",
+        en: "Electric",
+        color: "#e5b91f",
+        pokemon: "皮卡丘",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+        feature: "常具有較高速度，也可能透過麻痺效果限制對手行動。",
+        strong: "水、飛行",
+        weakAttack: "電、草、龍；對地面無效",
+        weakness: "地面"
+      },
+      {
+        id: "psychic",
+        zh: "超能力屬性",
+        en: "Psychic",
+        color: "#d65b91",
+        pokemon: "太陽伊布",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/196.png",
+        feature: "常以精神力量進行攻擊，許多代表寶可夢具有較高的特殊攻擊。",
+        strong: "格鬥、毒",
+        weakAttack: "超能力、鋼；對惡無效",
+        weakness: "蟲、幽靈、惡"
+      },
+      {
+        id: "ghost",
+        zh: "幽靈屬性",
+        en: "Ghost",
+        color: "#725a9b",
+        pokemon: "耿鬼",
+        image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
+        feature: "擁有特殊的屬性互動，幽靈屬性招式對一般屬性無效。",
+        strong: "超能力、幽靈",
+        weakAttack: "惡；對一般無效",
+        weakness: "幽靈、惡"
+      }
+    ];
+
+    const quizData = [
+      {
+        question: "火屬性寶可夢容易受到哪一種屬性攻擊？",
+        options: ["草", "水", "冰"],
+        answer: "水"
+      },
+      {
+        question: "哪一種屬性是電屬性的唯一弱點？",
+        options: ["地面", "飛行", "水"],
+        answer: "地面"
+      },
+      {
+        question: "水屬性攻擊對哪一種屬性效果絕佳？",
+        options: ["火", "草", "龍"],
+        answer: "火"
+      },
+      {
+        question: "超能力屬性攻擊對哪一種屬性無效？",
+        options: ["惡", "毒", "格鬥"],
+        answer: "惡"
+      },
+      {
+        question: "幽靈屬性招式對哪一種屬性無效？",
+        options: ["超能力", "一般", "蟲"],
+        answer: "一般"
+      }
+    ];
+
+    const typeGrid = document.getElementById("typeGrid");
+    const detailPanel = document.getElementById("detailPanel");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderCards(types) {
+      typeGrid.innerHTML = "";
+
+      if (types.length === 0) {
+        typeGrid.innerHTML =
+          '<p class="empty-message">找不到符合的屬性，請換一個關鍵字。</p>';
+        return;
+      }
+
+      types.forEach(type => {
+        const card = document.createElement("article");
+        card.className = "type-card";
+        card.style.setProperty("--type-color", type.color);
+        card.tabIndex = 0;
+
+        card.innerHTML = `
+          <div class="card-color"></div>
+          <div class="card-content">
+            <img src="${type.image}" alt="${type.pokemon}">
+            <h3 class="type-name">${type.zh}</h3>
+            <div class="english-name">${type.en}</div>
+            <p>${type.feature}</p>
+            <span class="more-button">查看詳細資訊</span>
+          </div>
+        `;
+
+        card.addEventListener("click", () => showDetails(type));
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            showDetails(type);
+          }
+        });
+
+        typeGrid.appendChild(card);
+      });
+    }
+
+    function showDetails(type) {
+      detailPanel.style.setProperty("--detail-color", type.color);
+      detailPanel.innerHTML = `
+        <div class="detail-header">
+          <img src="${type.image}" alt="${type.pokemon}">
+          <div>
+            <h2>${type.zh}｜${type.en}</h2>
+            <p>${type.feature}</p>
+            <strong>代表寶可夢：${type.pokemon}</strong>
+          </div>
+        </div>
+
+        <div class="detail-list">
+          <div class="detail-item">
+            <strong>攻擊效果絕佳</strong>
+            ${type.strong}
+          </div>
+
+          <div class="detail-item">
+            <strong>攻擊效果不佳或無效</strong>
+            ${type.weakAttack}
+          </div>
+
+          <div class="detail-item">
+            <strong>防禦時的弱點</strong>
+            ${type.weakness}
+          </div>
+        </div>
+
+        <button class="close-button" onclick="closeDetails()">關閉詳細資訊</button>
+      `;
+
+      detailPanel.classList.add("show");
+      detailPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function closeDetails() {
+      detailPanel.classList.remove("show");
+    }
+
+    searchInput.addEventListener("input", event => {
+      const keyword = event.target.value.trim().toLowerCase();
+
+      const results = typeData.filter(type =>
+        type.zh.includes(keyword) ||
+        type.en.toLowerCase().includes(keyword) ||
+        type.pokemon.includes(keyword)
+      );
+
+      renderCards(results);
+    });
+
+    let currentQuiz = 0;
+    const quizQuestion = document.getElementById("quizQuestion");
+    const quizOptions = document.getElementById("quizOptions");
+    const quizResult = document.getElementById("quizResult");
+    const nextQuestion = document.getElementById("nextQuestion");
+
+    function renderQuiz() {
+      const quiz = quizData[currentQuiz];
+
+      quizQuestion.textContent = `${currentQuiz + 1}. ${quiz.question}`;
+      quizOptions.innerHTML = "";
+      quizResult.textContent = "";
+      nextQuestion.style.display = "none";
+
+      quiz.options.forEach(option => {
+        const button = document.createElement("button");
+        button.className = "quiz-option";
+        button.textContent = option;
+
+        button.addEventListener("click", () => checkAnswer(option));
+        quizOptions.appendChild(button);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const quiz = quizData[currentQuiz];
+      const buttons = document.querySelectorAll(".quiz-option");
+
+      buttons.forEach(button => {
+        button.disabled = true;
+
+        if (button.textContent === quiz.answer) {
+          button.style.borderColor = "#45a267";
+          button.style.background = "#eaf8ef";
+        }
+      });
+
+      if (selected === quiz.answer) {
+        quizResult.textContent = "答對了！";
+        quizResult.style.color = "#29834d";
+      } else {
+        quizResult.textContent = `答錯了，正確答案是「${quiz.answer}」。`;
+        quizResult.style.color = "#c7473b";
+      }
+
+      nextQuestion.style.display = "inline-block";
+    }
+
+    nextQuestion.addEventListener("click", () => {
+      currentQuiz = (currentQuiz + 1) % quizData.length;
+      renderQuiz();
+    });
+
+    renderCards(typeData);
+    renderQuiz();
+  </script>
+</body>
+</html>
